@@ -80,14 +80,14 @@ fun BookshelfGridItem(
     coverShadow: Boolean = false,
     accessibilityLabel: String? = null,
     coverWidth: Int = 84,
+    coverRadius: Int = 4,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp))
-            .then(if (isSelected) Modifier.background(LegadoTheme.colorScheme.secondaryContainer) else Modifier)
+            .then(if (isSelected) Modifier.clip(RoundedCornerShape(coverRadius.dp)).background(LegadoTheme.colorScheme.secondaryContainer) else Modifier)
             .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick)
             .bookshelfItemSemantics(accessibilityLabel ?: title, isSelected)
     ) {
@@ -97,7 +97,7 @@ fun BookshelfGridItem(
                 .align(Alignment.Center)
                 .width(coverWidth.dp)
         ) {
-            BookshelfItemCover(coverShadow = coverShadow, cover = cover) {
+            BookshelfItemCover(coverShadow = coverShadow, coverRadius = coverRadius, cover = cover) {
                 if (gridStyle == 1) {
                     AppText(
                         text = title,
@@ -160,6 +160,7 @@ fun BookshelfListItem(
     titleColor: Color? = null,
     accessibilityLabel: String? = null,
     coverWidth: Int = 84,
+    coverRadius: Int = 4,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?
 ) {
@@ -190,7 +191,7 @@ fun BookshelfListItem(
                         )
                         .width(coverWidth.dp)
                 ) {
-                    BookshelfItemCover(coverShadow = coverShadow, cover = cover)
+                    BookshelfItemCover(coverShadow = coverShadow, coverRadius = coverRadius, cover = cover)
                 }
                 Column(
                     modifier = Modifier
@@ -254,16 +255,18 @@ fun BookshelfListItem(
 @Composable
 private fun BookshelfItemCover(
     coverShadow: Boolean,
+    coverRadius: Int = 4,
     cover: @Composable (Modifier) -> Unit,
     overlay: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit = {},
 ) {
+    val coverShape = RoundedCornerShape(coverRadius.dp)
     Box(
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth()
             .aspectRatio(5f / 7f)
-            .then(if (coverShadow) Modifier.shadow(4.dp, RoundedCornerShape(4.dp)) else Modifier)
-            .clip(RoundedCornerShape(4.dp))
+            .then(if (coverShadow) Modifier.shadow(4.dp, coverShape) else Modifier)
+            .clip(coverShape)
     ) {
         cover(Modifier.fillMaxSize())
         overlay()
@@ -285,10 +288,11 @@ fun BookGroupCover(
     leftBottomText: String? = null,
     modifier: Modifier = Modifier
 ) {
+    val coverShape = RoundedCornerShape(settings.bookshelfGridCoverRadius.dp)
     Box(
         modifier = modifier
             .aspectRatio(5f / 7f)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(coverShape)
     ) {
         if (!coverPath.isNullOrBlank()) {
             CoilBookCover(
@@ -428,6 +432,7 @@ fun BookGroupItemGrid(
         titleMaxLines = titleMaxLines,
         coverShadow = coverShadow,
         coverWidth = settings.bookshelfGridCoverWidth,
+        coverRadius = settings.bookshelfGridCoverRadius,
         onClick = onClick,
         onLongClick = onLongClick
     )
@@ -493,6 +498,7 @@ fun BookGroupItemList(
         titleMaxLines = titleMaxLines,
         coverShadow = coverShadow,
         coverWidth = settings.bookshelfListCoverWidth,
+        coverRadius = settings.bookshelfListCoverRadius,
         modifier = modifier,
         onClick = onClick,
         onLongClick = onLongClick
@@ -577,7 +583,7 @@ fun BookGroupItemHorizontalCovers(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(5f / 7f)
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(RoundedCornerShape(settings.bookshelfListCoverRadius.dp))
                                 .clickable(
                                     role = Role.Button,
                                     onClick = { onBookClick?.invoke(book) }
@@ -678,6 +684,7 @@ fun BookItem(
             name = book.name,
             author = book.author,
             path = book.getDisplayCover(),
+            radius = if (layoutMode != 0) settings.bookshelfGridCoverRadius.dp else settings.bookshelfListCoverRadius.dp,
             isUpdating = isUpdating,
             modifier = coverModifier,
             coverModifier = Modifier
@@ -717,6 +724,7 @@ fun BookItem(
             coverShadow = coverShadow,
             accessibilityLabel = accessibilityLabel,
             coverWidth = settings.bookshelfGridCoverWidth,
+            coverRadius = settings.bookshelfGridCoverRadius,
             onClick = onClick,
             onLongClick = onLongClick,
         )
@@ -829,6 +837,7 @@ fun BookItem(
         coverShadow = coverShadow,
         accessibilityLabel = accessibilityLabel,
         coverWidth = settings.bookshelfListCoverWidth,
+        coverRadius = settings.bookshelfListCoverRadius,
         onClick = onClick,
         onLongClick = onLongClick,
     )

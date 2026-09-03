@@ -48,6 +48,8 @@ data class BookshelfSettings(
     val bookshelfGroupCoverCount: Int = 4,
     val bookshelfListCoverWidth: Int = 84,
     val bookshelfGridCoverWidth: Int = 120,
+    val bookshelfListCoverRadius: Int = 4,
+    val bookshelfGridCoverRadius: Int = 4,
     val bookshelfSearchActionDirectToSearch: Boolean = true,
     val autoRefreshBook: Boolean = false,
     val saveTabPosition: Long = BookGroup.IdAll,

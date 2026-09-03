@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Update
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.legado.app.ui.theme.LegadoTheme
 import io.legado.app.ui.widget.components.card.TextCard
@@ -25,6 +26,7 @@ fun BookshelfCover(
     name: String?,
     author: String?,
     path: String?,
+    radius: Dp = 4.dp,
     modifier: Modifier = Modifier,
     coverModifier: Modifier = Modifier.fillMaxWidth(),
     isUpdating: Boolean = false,
@@ -43,6 +45,7 @@ fun BookshelfCover(
             name = name,
             author = author,
             path = path,
+            radius = radius,
             modifier = coverModifier,
             sourceOrigin = sourceOrigin,
             onLoadFinish = onLoadFinish,

@@ -204,6 +204,15 @@ fun BookshelfConfigSheet(
                                     onUpdate { it.copy(bookshelfListCoverWidth = value.toInt()) }
                                 }
                             )
+                            CompactSliderSettingItem(
+                                title = stringResource(R.string.list_cover_radius),
+                                value = settings.bookshelfListCoverRadius.toFloat(),
+                                valueRange = 0f..16f,
+                                steps = 16,
+                                onValueChange = { value ->
+                                    onUpdate { it.copy(bookshelfListCoverRadius = value.toInt()) }
+                                }
+                            )
                         }
                     }
 
@@ -321,6 +330,15 @@ fun BookshelfConfigSheet(
                             onUpdate { it.copy(bookshelfGridCoverWidth = value.toInt()) }
                         }
                     )
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.grid_cover_radius),
+                        value = settings.bookshelfGridCoverRadius.toFloat(),
+                        valueRange = 0f..16f,
+                        steps = 16,
+                        onValueChange = { value ->
+                            onUpdate { it.copy(bookshelfGridCoverRadius = value.toInt()) }
+                        }
+                    )
                 }
             }
 
@@ -399,6 +417,15 @@ fun BookshelfConfigSheet(
                         steps = 80,
                         onValueChange = { value ->
                             onUpdate { it.copy(bookshelfListCoverWidth = value.toInt()) }
+                        }
+                    )
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.list_cover_radius),
+                        value = settings.bookshelfListCoverRadius.toFloat(),
+                        valueRange = 0f..16f,
+                        steps = 16,
+                        onValueChange = { value ->
+                            onUpdate { it.copy(bookshelfListCoverRadius = value.toInt()) }
                         }
                     )
 

@@ -2445,6 +2445,8 @@
     <string name="folder_list_style">文件夹列表样式</string>
     <string name="horizontal_cover_count">横排封面数量</string>
     <string name="grid_cover_width">网格封面宽度</string>
+    <string name="list_cover_radius">列表封面圆角</string>
+    <string name="grid_cover_radius">网格封面圆角</string>
     <string name="day_card_bg_color">日间卡片背景颜色</string>
     <string name="night_card_bg_color">夜间卡片背景颜色</string>
     <string name="compact_details">精简详情</string>

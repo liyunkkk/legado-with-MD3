@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.legado.app.R
 import io.legado.app.constant.BookType
@@ -91,9 +92,11 @@ fun BookshelfItem(
     descAnnotated: AnnotatedString? = null,
     accessibilityLabel: String? = null,
     coverWidth: Int = 84,
+    coverRadius: Int = 4,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?
 ) {
+    val coverShape = RoundedCornerShape(coverRadius.dp)
     val isDark = LegadoTheme.isDark
     val bookshelfCardColor =
         if (isDark) BookshelfConfig.bookshelfCardColorDark else BookshelfConfig.bookshelfCardColor
@@ -145,10 +148,10 @@ fun BookshelfItem(
                         .then(
                             if (coverShadow) Modifier.shadow(
                                 4.dp,
-                                RoundedCornerShape(4.dp)
+                                coverShape
                             ) else Modifier
                         )
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(coverShape)
                 ) {
                     cover(Modifier.fillMaxSize())
                     if (gridStyle == 1) {
@@ -228,10 +231,10 @@ fun BookshelfItem(
                                 .then(
                                     if (coverShadow) Modifier.shadow(
                                         4.dp,
-                                        RoundedCornerShape(4.dp)
+                                        coverShape
                                     ) else Modifier
                                 )
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(coverShape)
                         ) {
                             cover(Modifier.fillMaxSize())
                         }
@@ -315,18 +318,20 @@ fun BookGroupCover(
     books: List<BookUiItem>,
     coverPath: String? = null,
     leftBottomText: String? = null,
+    radius: Dp = 4.dp,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .aspectRatio(5f / 7f)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(radius))
     ) {
         if (!coverPath.isNullOrBlank()) {
             CoilBookCover(
                 name = null,
                 author = null,
                 path = coverPath,
+                radius = radius,
                 modifier = Modifier.fillMaxSize()
             )
         } else {
@@ -449,6 +454,7 @@ fun BookGroupItemGrid(
                 books = previewBooks,
                 coverPath = group.cover,
                 leftBottomText = countText,
+                radius = BookshelfConfig.bookshelfGridCoverRadius.dp,
                 modifier = it
             )
         },
@@ -460,6 +466,7 @@ fun BookGroupItemGrid(
         titleMaxLines = titleMaxLines,
         coverShadow = coverShadow,
         coverWidth = BookshelfConfig.bookshelfGridCoverWidth,
+        coverRadius = BookshelfConfig.bookshelfGridCoverRadius,
         onClick = onClick,
         onLongClick = onLongClick
     )
@@ -507,7 +514,14 @@ fun BookGroupItemList(
         isGrid = false,
         gridStyle = 0,
         isCompact = BookshelfConfig.bookshelfGroupListStyle == 1 || isCompact,
-        cover = { BookGroupCover(books = previewBooks, coverPath = group.cover, modifier = it) },
+        cover = {
+            BookGroupCover(
+                books = previewBooks,
+                coverPath = group.cover,
+                radius = BookshelfConfig.bookshelfListCoverRadius.dp,
+                modifier = it
+            )
+        },
         title = group.groupName,
         subTitle = countText,
         descAnnotated = descAnnotated,
@@ -521,6 +535,7 @@ fun BookGroupItemList(
         titleMaxLines = titleMaxLines,
         coverShadow = coverShadow,
         coverWidth = BookshelfConfig.bookshelfListCoverWidth,
+        coverRadius = BookshelfConfig.bookshelfListCoverRadius,
         modifier = modifier,
         onClick = onClick,
         onLongClick = onLongClick
@@ -604,7 +619,7 @@ fun BookGroupItemHorizontalCovers(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(5f / 7f)
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(RoundedCornerShape(BookshelfConfig.bookshelfListCoverRadius.dp))
                                 .clickable(
                                     role = Role.Button,
                                     onClick = { onBookClick?.invoke(book) }
@@ -621,6 +636,7 @@ fun BookGroupItemHorizontalCovers(
                                 name = book.name,
                                 author = book.author,
                                 path = book.getDisplayCover(),
+                                radius = BookshelfConfig.bookshelfListCoverRadius.dp,
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -710,6 +726,11 @@ fun BookItem(
                 name = book.name,
                 author = book.author,
                 path = book.getDisplayCover(),
+                radius = if (layoutMode == 0) {
+                    BookshelfConfig.bookshelfListCoverRadius.dp
+                } else {
+                    BookshelfConfig.bookshelfGridCoverRadius.dp
+                },
                 isUpdating = isUpdating,
                 modifier = modifier,
                 coverModifier = Modifier
@@ -815,6 +836,7 @@ fun BookItem(
             bookTypeLabel,
         ),
         coverWidth = if (layoutMode == 0) BookshelfConfig.bookshelfListCoverWidth else BookshelfConfig.bookshelfGridCoverWidth,
+        coverRadius = if (layoutMode == 0) BookshelfConfig.bookshelfListCoverRadius else BookshelfConfig.bookshelfGridCoverRadius,
         onClick = onClick,
         onLongClick = onLongClick
     )

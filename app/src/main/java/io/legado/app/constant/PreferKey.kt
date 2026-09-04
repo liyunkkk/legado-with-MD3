@@ -286,6 +286,8 @@ object PreferKey {
     const val bookshelfGroupCoverCount = "bookshelfGroupCoverCount"
     const val bookshelfListCoverWidth = "bookshelfListCoverWidth"
     const val bookshelfGridCoverWidth = "bookshelfGridCoverWidth"
+    const val bookshelfListCoverRadius = "bookshelfListCoverRadius"
+    const val bookshelfGridCoverRadius = "bookshelfGridCoverRadius"
 
 
     const val tabletInterface = "tabletInterface"

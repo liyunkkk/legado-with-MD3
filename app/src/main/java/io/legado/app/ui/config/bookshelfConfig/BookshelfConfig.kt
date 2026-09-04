@@ -309,6 +309,20 @@ object BookshelfConfig {
     val bookshelfGridCoverWidthState: State<Int> get() = _bookshelfGridCoverWidth.state
 
     /**
+     * 书架列表模式下封面圆角
+     */
+    private val _bookshelfListCoverRadius = prefStateDelegate(PreferKey.bookshelfListCoverRadius, 4)
+    var bookshelfListCoverRadius by _bookshelfListCoverRadius
+    val bookshelfListCoverRadiusState: State<Int> get() = _bookshelfListCoverRadius.state
+
+    /**
+     * 书架网格模式下封面圆角
+     */
+    private val _bookshelfGridCoverRadius = prefStateDelegate(PreferKey.bookshelfGridCoverRadius, 4)
+    var bookshelfGridCoverRadius by _bookshelfGridCoverRadius
+    val bookshelfGridCoverRadiusState: State<Int> get() = _bookshelfGridCoverRadius.state
+
+    /**
      * 书架搜索按钮是否直接跳转搜索页
      */
     private val _bookshelfSearchActionDirectToSearch = prefStateDelegate(

@@ -2156,9 +2156,11 @@
     <string name="selection_mode">選擇模式</string>
     <string name="folder_layout_mode">資料夾佈局模式</string>
     <string name="list_cover_width">列表封面寬度</string>
+    <string name="list_cover_radius">列表封面圓角</string>
     <string name="folder_list_style">資料夾列表樣式</string>
     <string name="horizontal_cover_count">水平封面數量</string>
     <string name="grid_cover_width">網格封面寬度</string>
+    <string name="grid_cover_radius">網格封面圓角</string>
     <string name="day_card_bg_color">日間卡片背景色</string>
     <string name="night_card_bg_color">夜間卡片背景色</string>
     <string name="compact_details">精簡詳情</string>

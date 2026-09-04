@@ -165,6 +165,15 @@ fun BookshelfConfigSheet(
                                     BookshelfConfig.bookshelfListCoverWidth = it.toInt()
                                 }
                             )
+                            CompactSliderSettingItem(
+                                title = stringResource(R.string.list_cover_radius),
+                                value = BookshelfConfig.bookshelfListCoverRadius.toFloat(),
+                                valueRange = 0f..24f,
+                                steps = 23,
+                                onValueChange = {
+                                    BookshelfConfig.bookshelfListCoverRadius = it.toInt()
+                                }
+                            )
                         }
                     }
 
@@ -265,6 +274,13 @@ fun BookshelfConfigSheet(
                         steps = 110,
                         onValueChange = { BookshelfConfig.bookshelfGridCoverWidth = it.toInt() }
                     )
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.grid_cover_radius),
+                        value = BookshelfConfig.bookshelfGridCoverRadius.toFloat(),
+                        valueRange = 0f..24f,
+                        steps = 23,
+                        onValueChange = { BookshelfConfig.bookshelfGridCoverRadius = it.toInt() }
+                    )
                 }
             }
 
@@ -338,6 +354,13 @@ fun BookshelfConfigSheet(
                         valueRange = 40f..120f,
                         steps = 80,
                         onValueChange = { BookshelfConfig.bookshelfListCoverWidth = it.toInt() }
+                    )
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.list_cover_radius),
+                        value = BookshelfConfig.bookshelfListCoverRadius.toFloat(),
+                        valueRange = 0f..24f,
+                        steps = 23,
+                        onValueChange = { BookshelfConfig.bookshelfListCoverRadius = it.toInt() }
                     )
 
                     CompactSliderSettingItem(

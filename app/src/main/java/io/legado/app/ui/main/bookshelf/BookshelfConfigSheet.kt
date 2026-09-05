@@ -96,7 +96,59 @@ fun BookshelfConfigSheet(
                 onValueChange = { BookshelfConfig.bookshelfSortOrder = it.toInt() }
             )
 
-            // Layout Mode (non-folder)
+            CompactDropdownSettingItem(
+                title = stringResource(R.string.bookshelf_style),
+                selectedValue = BookshelfConfig.bookshelfLayoutStyle.toString(),
+                displayEntries = arrayOf(
+                    stringResource(R.string.bookshelf_style_native),
+                    stringResource(R.string.bookshelf_style_ios)
+                ),
+                entryValues = arrayOf("0", "1"),
+                onValueChange = { BookshelfConfig.bookshelfLayoutStyle = it.toInt() }
+            )
+
+            AnimatedVisibility(visible = BookshelfConfig.bookshelfLayoutStyle == 1) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val iosColumns = if (isLandscape) {
+                        BookshelfConfig.bookshelfIosColumnsLandscape
+                    } else {
+                        BookshelfConfig.bookshelfIosColumnsPortrait
+                    }
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.ios_bookshelf_columns),
+                        description = stringResource(
+                            if (isLandscape) R.string.screen_landscape else R.string.screen_portrait
+                        ),
+                        value = iosColumns.toFloat(),
+                        valueRange = 2f..10f,
+                        steps = 7,
+                        onValueChange = {
+                            if (isLandscape) {
+                                BookshelfConfig.bookshelfIosColumnsLandscape = it.toInt()
+                            } else {
+                                BookshelfConfig.bookshelfIosColumnsPortrait = it.toInt()
+                            }
+                        }
+                    )
+                    CompactSliderSettingItem(
+                        title = stringResource(R.string.ios_bookshelf_cover_radius),
+                        value = BookshelfConfig.bookshelfIosCoverRadius.toFloat(),
+                        valueRange = 0f..16f,
+                        steps = 15,
+                        onValueChange = { BookshelfConfig.bookshelfIosCoverRadius = it.toInt() }
+                    )
+                    CompactSwitchSettingItem(
+                        title = stringResource(R.string.ios_bookshelf_show_author),
+                        checked = BookshelfConfig.bookshelfIosShowAuthor,
+                        color = LegadoTheme.colorScheme.surface,
+                        onCheckedChange = { BookshelfConfig.bookshelfIosShowAuthor = it }
+                    )
+                }
+            }
+
+            PillDivider()
+
+            // Layout Mode (non-folder). These values remain untouched in iOS mode.
             val layoutMode =
                 if (isLandscape) BookshelfConfig.bookshelfLayoutModeLandscape
                 else BookshelfConfig.bookshelfLayoutModePortrait

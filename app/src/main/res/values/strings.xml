@@ -2236,6 +2236,12 @@
     <string name="horizontal_cover_count">Horizontal Cover Count</string>
     <string name="grid_cover_width">Grid Cover Width</string>
     <string name="grid_cover_radius">Grid Cover Radius</string>
+    <string name="bookshelf_style">Bookshelf Style</string>
+    <string name="bookshelf_style_native">Native</string>
+    <string name="bookshelf_style_ios">iOS Books</string>
+    <string name="ios_bookshelf_columns">iOS Books Columns</string>
+    <string name="ios_bookshelf_cover_radius">iOS Books Cover Radius</string>
+    <string name="ios_bookshelf_show_author">Show Author in iOS Books</string>
     <string name="day_card_bg_color">Day Card Background Color</string>
     <string name="night_card_bg_color">Night Card Background Color</string>
     <string name="compact_details">Compact Details</string>

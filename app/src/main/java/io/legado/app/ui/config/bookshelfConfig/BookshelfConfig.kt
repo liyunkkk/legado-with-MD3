@@ -323,6 +323,41 @@ object BookshelfConfig {
     val bookshelfGridCoverRadiusState: State<Int> get() = _bookshelfGridCoverRadius.state
 
     /**
+     * 书架视觉风格: 0: 原生, 1: iOS 图书
+     */
+    private val _bookshelfLayoutStyle = prefStateDelegate(PreferKey.bookshelfLayoutStyle, 0)
+    var bookshelfLayoutStyle by _bookshelfLayoutStyle
+    val bookshelfLayoutStyleState: State<Int> get() = _bookshelfLayoutStyle.state
+
+    /**
+     * iOS 图书风格竖屏列数
+     */
+    private val _bookshelfIosColumnsPortrait = prefStateDelegate(PreferKey.bookshelfIosColumnsPortrait, 3)
+    var bookshelfIosColumnsPortrait by _bookshelfIosColumnsPortrait
+    val bookshelfIosColumnsPortraitState: State<Int> get() = _bookshelfIosColumnsPortrait.state
+
+    /**
+     * iOS 图书风格横屏列数
+     */
+    private val _bookshelfIosColumnsLandscape = prefStateDelegate(PreferKey.bookshelfIosColumnsLandscape, 5)
+    var bookshelfIosColumnsLandscape by _bookshelfIosColumnsLandscape
+    val bookshelfIosColumnsLandscapeState: State<Int> get() = _bookshelfIosColumnsLandscape.state
+
+    /**
+     * iOS 图书风格封面圆角
+     */
+    private val _bookshelfIosCoverRadius = prefStateDelegate(PreferKey.bookshelfIosCoverRadius, 6)
+    var bookshelfIosCoverRadius by _bookshelfIosCoverRadius
+    val bookshelfIosCoverRadiusState: State<Int> get() = _bookshelfIosCoverRadius.state
+
+    /**
+     * iOS 图书风格是否显示作者
+     */
+    private val _bookshelfIosShowAuthor = prefStateDelegate(PreferKey.bookshelfIosShowAuthor, true)
+    var bookshelfIosShowAuthor by _bookshelfIosShowAuthor
+    val bookshelfIosShowAuthorState: State<Boolean> get() = _bookshelfIosShowAuthor.state
+
+    /**
      * 书架搜索按钮是否直接跳转搜索页
      */
     private val _bookshelfSearchActionDirectToSearch = prefStateDelegate(

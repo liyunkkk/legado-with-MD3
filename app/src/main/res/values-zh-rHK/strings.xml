@@ -1697,6 +1697,12 @@
     <string name="grid">網格</string>
     <string name="grid_cover_width">網格封面寬度</string>
     <string name="grid_cover_radius">網格封面圓角</string>
+    <string name="bookshelf_style">書架風格</string>
+    <string name="bookshelf_style_native">原生</string>
+    <string name="bookshelf_style_ios">iOS 圖書</string>
+    <string name="ios_bookshelf_columns">iOS 圖書欄數</string>
+    <string name="ios_bookshelf_cover_radius">iOS 圖書封面圓角</string>
+    <string name="ios_bookshelf_show_author">iOS 圖書顯示作者</string>
     <string name="group_add">新建分組</string>
     <string name="group_management">分組管理</string>
     <string name="group_name_empty">分組名稱不能為空</string>

@@ -288,8 +288,11 @@ object PreferKey {
     const val bookshelfGridCoverWidth = "bookshelfGridCoverWidth"
     const val bookshelfListCoverRadius = "bookshelfListCoverRadius"
     const val bookshelfGridCoverRadius = "bookshelfGridCoverRadius"
-
-
+    const val bookshelfLayoutStyle = "bookshelfLayoutStyle"
+    const val bookshelfIosColumnsPortrait = "bookshelfIosColumnsPortrait"
+    const val bookshelfIosColumnsLandscape = "bookshelfIosColumnsLandscape"
+    const val bookshelfIosCoverRadius = "bookshelfIosCoverRadius"
+    const val bookshelfIosShowAuthor = "bookshelfIosShowAuthor"
     const val tabletInterface = "tabletInterface"
     const val pureBlack = "pure_black"
     const val labelVisibilityMode = "labelVisibilityMode"

@@ -2161,6 +2161,12 @@
     <string name="horizontal_cover_count">水平封面數量</string>
     <string name="grid_cover_width">網格封面寬度</string>
     <string name="grid_cover_radius">網格封面圓角</string>
+    <string name="bookshelf_style">書架風格</string>
+    <string name="bookshelf_style_native">原生</string>
+    <string name="bookshelf_style_ios">iOS 圖書</string>
+    <string name="ios_bookshelf_columns">iOS 圖書欄數</string>
+    <string name="ios_bookshelf_cover_radius">iOS 圖書封面圓角</string>
+    <string name="ios_bookshelf_show_author">iOS 圖書顯示作者</string>
     <string name="day_card_bg_color">日間卡片背景色</string>
     <string name="night_card_bg_color">夜間卡片背景色</string>
     <string name="compact_details">精簡詳情</string>

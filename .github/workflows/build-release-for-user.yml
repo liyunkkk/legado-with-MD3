@@ -53,7 +53,7 @@ jobs:
           ./gradlew assembleAppRelease --no-daemon --no-configuration-cache
         env:
           COMMIT_NUMBER: ${{ github.run_number }}
-          APP_VERSION_NAME: 3.26.15-radius
+          APP_VERSION_NAME: 3.26.15-ios-books
 
       - name: Check Build Output
         run: |
@@ -67,13 +67,13 @@ jobs:
       - name: Upload arm64-v8a APK
         uses: actions/upload-artifact@v4
         with:
-          name: legado-radius-arm64-v8a
+          name: legado-ios-books-arm64-v8a
           if-no-files-found: error
           path: app/build/outputs/apk/app/release/*arm64-v8a*.apk
 
       - name: Upload universal APK
         uses: actions/upload-artifact@v4
         with:
-          name: legado-radius-universal
+          name: legado-ios-books-universal
           if-no-files-found: warn
           path: app/build/outputs/apk/app/release/*universal*.apk

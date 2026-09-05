@@ -59,6 +59,7 @@ import io.legado.app.ui.widget.components.card.NormalCard
 import io.legado.app.ui.widget.components.card.TextCard
 import io.legado.app.ui.widget.components.icon.AppIcon
 import io.legado.app.ui.widget.components.image.cover.BookshelfCover
+import io.legado.app.ui.widget.components.image.cover.BookshelfCoverFrame
 import io.legado.app.ui.widget.components.image.cover.CoilBookCover
 import io.legado.app.ui.widget.components.text.AppText
 import io.legado.app.utils.toTimeAgo
@@ -93,6 +94,7 @@ fun BookshelfItem(
     accessibilityLabel: String? = null,
     coverWidth: Int = 84,
     coverRadius: Int = 4,
+    iosStyle: Boolean = false,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?
 ) {
@@ -118,10 +120,15 @@ fun BookshelfItem(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
+                .then(
+                    if (iosStyle) Modifier else Modifier.clip(RoundedCornerShape(4.dp))
+                )
                 .then(
                     if (isSelected) {
-                        Modifier.background(LegadoTheme.colorScheme.secondaryContainer)
+                        Modifier.background(
+                            LegadoTheme.colorScheme.secondaryContainer,
+                            RoundedCornerShape(4.dp)
+                        )
                     } else {
                         Modifier
                     }
@@ -134,24 +141,37 @@ fun BookshelfItem(
                 .then(accessibilityModifier)
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = if (iosStyle) Alignment.Start else Alignment.CenterHorizontally,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .width(coverWidth.dp)
+                    .then(
+                        if (iosStyle) {
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 2.dp)
+                        } else {
+                            Modifier.width(coverWidth.dp)
+                        }
+                    )
             ) {
 
                 Box(
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(
+                            start = 4.dp,
+                            top = 4.dp,
+                            end = if (iosStyle) 6.dp else 4.dp,
+                            bottom = if (iosStyle) 7.dp else 4.dp
+                        )
                         .fillMaxWidth()
                         .aspectRatio(5f / 7f)
                         .then(
-                            if (coverShadow) Modifier.shadow(
+                            if (coverShadow && !iosStyle) Modifier.shadow(
                                 4.dp,
                                 coverShape
                             ) else Modifier
                         )
-                        .clip(coverShape)
+                        .then(if (iosStyle) Modifier else Modifier.clip(coverShape))
                 ) {
                     cover(Modifier.fillMaxSize())
                     if (gridStyle == 1) {
@@ -187,13 +207,26 @@ fun BookshelfItem(
                     AppText(
                         text = title,
                         style = if (titleSmallFont) LegadoTheme.typography.labelSmall else LegadoTheme.typography.labelMedium,
-                        maxLines = titleMaxLines,
+                        maxLines = if (iosStyle) 1 else titleMaxLines,
                         overflow = TextOverflow.Ellipsis,
-                        textAlign = if (titleCenter) TextAlign.Center else TextAlign.Start,
+                        textAlign = if (iosStyle) TextAlign.Start else if (titleCenter) TextAlign.Center else TextAlign.Start,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                            .padding(start = 4.dp, end = 4.dp, bottom = if (iosStyle) 0.dp else 4.dp)
                     )
+                    if (iosStyle && !subTitle.isNullOrBlank()) {
+                        AppText(
+                            text = subTitle,
+                            style = LegadoTheme.typography.labelSmall,
+                            color = LegadoTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 4.dp, end = 4.dp, top = 1.dp, bottom = 6.dp)
+                        )
+                    }
                 }
             }
         }
@@ -319,10 +352,12 @@ fun BookGroupCover(
     coverPath: String? = null,
     leftBottomText: String? = null,
     radius: Dp = 4.dp,
+    iosStyle: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+    val groupContent: @Composable (Modifier) -> Unit = { contentModifier ->
     Box(
-        modifier = modifier
+        modifier = contentModifier
             .aspectRatio(5f / 7f)
             .clip(RoundedCornerShape(radius))
     ) {
@@ -429,6 +464,16 @@ fun BookGroupCover(
             )
         }
     }
+    }
+    if (iosStyle) {
+        BookshelfCoverFrame(
+            radius = radius,
+            modifier = modifier,
+            content = groupContent
+        )
+    } else {
+        groupContent(modifier)
+    }
 }
 
 @Composable
@@ -441,6 +486,7 @@ fun BookGroupItemGrid(
     titleCenter: Boolean = true,
     titleMaxLines: Int = 2,
     coverShadow: Boolean = false,
+    iosStyle: Boolean = false,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?
@@ -454,19 +500,22 @@ fun BookGroupItemGrid(
                 books = previewBooks,
                 coverPath = group.cover,
                 leftBottomText = countText,
-                radius = BookshelfConfig.bookshelfGridCoverRadius.dp,
+                radius = if (iosStyle) BookshelfConfig.bookshelfIosCoverRadius.dp else BookshelfConfig.bookshelfGridCoverRadius.dp,
+                iosStyle = iosStyle,
                 modifier = it
             )
         },
         title = group.groupName,
+        subTitle = if (iosStyle) countText else null,
         accessibilityLabel = groupAccessibilityLabel(group.groupName, countText),
         modifier = modifier,
         titleSmallFont = titleSmallFont,
-        titleCenter = titleCenter,
+        titleCenter = if (iosStyle) false else titleCenter,
         titleMaxLines = titleMaxLines,
         coverShadow = coverShadow,
         coverWidth = BookshelfConfig.bookshelfGridCoverWidth,
-        coverRadius = BookshelfConfig.bookshelfGridCoverRadius,
+        coverRadius = if (iosStyle) BookshelfConfig.bookshelfIosCoverRadius else BookshelfConfig.bookshelfGridCoverRadius,
+        iosStyle = iosStyle,
         onClick = onClick,
         onLongClick = onLongClick
     )
@@ -670,6 +719,7 @@ fun BookItem(
     titleCenter: Boolean = true,
     titleMaxLines: Int = 2,
     coverShadow: Boolean = false,
+    iosStyle: Boolean = false,
     isSearchMode: Boolean = false,
     searchKey: String = "",
     sharedTransitionScope: SharedTransitionScope? = null,
@@ -726,10 +776,10 @@ fun BookItem(
                 name = book.name,
                 author = book.author,
                 path = book.getDisplayCover(),
-                radius = if (layoutMode == 0) {
-                    BookshelfConfig.bookshelfListCoverRadius.dp
-                } else {
-                    BookshelfConfig.bookshelfGridCoverRadius.dp
+                radius = when {
+                    iosStyle -> BookshelfConfig.bookshelfIosCoverRadius.dp
+                    layoutMode == 0 -> BookshelfConfig.bookshelfListCoverRadius.dp
+                    else -> BookshelfConfig.bookshelfGridCoverRadius.dp
                 },
                 isUpdating = isUpdating,
                 modifier = modifier,
@@ -744,13 +794,14 @@ fun BookItem(
                 sharedTransitionScope = sharedTransitionScope,
                 animatedVisibilityScope = animatedVisibilityScope,
                 sharedCoverKey = sharedCoverKey,
+                iosStyle = iosStyle,
             )
         },
         title = book.name,
-        subTitle = if (layoutMode == 0 && isCompact) {
-            stringResource(R.string.author_read, book.author, unreadCount)
-        } else {
-            book.author
+        subTitle = when {
+            iosStyle && !BookshelfConfig.bookshelfIosShowAuthor -> null
+            layoutMode == 0 && isCompact -> stringResource(R.string.author_read, book.author, unreadCount)
+            else -> book.author
         },
         desc = book.durChapterTitle ?: "",
         columnContent = if (layoutMode == 0 && !isCompact && BookshelfConfig.showBookIntro) {
@@ -836,7 +887,12 @@ fun BookItem(
             bookTypeLabel,
         ),
         coverWidth = if (layoutMode == 0) BookshelfConfig.bookshelfListCoverWidth else BookshelfConfig.bookshelfGridCoverWidth,
-        coverRadius = if (layoutMode == 0) BookshelfConfig.bookshelfListCoverRadius else BookshelfConfig.bookshelfGridCoverRadius,
+        coverRadius = when {
+            iosStyle -> BookshelfConfig.bookshelfIosCoverRadius
+            layoutMode == 0 -> BookshelfConfig.bookshelfListCoverRadius
+            else -> BookshelfConfig.bookshelfGridCoverRadius
+        },
+        iosStyle = iosStyle,
         onClick = onClick,
         onLongClick = onLongClick
     )

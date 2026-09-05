@@ -355,6 +355,14 @@ fun BookshelfScreen(
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val bookshelfLayoutStyle by BookshelfConfig.bookshelfLayoutStyleState
+    val isIosBookshelf = bookshelfLayoutStyle == 1
+    val bookshelfIosColumns by remember(isLandscape) {
+        derivedStateOf {
+            if (isLandscape) BookshelfConfig.bookshelfIosColumnsLandscapeState.value
+            else BookshelfConfig.bookshelfIosColumnsPortraitState.value
+        }
+    }
     val bookshelfFolderLayoutMode by remember(isLandscape) {
         derivedStateOf {
             if (isLandscape) BookshelfConfig.bookshelfFolderLayoutModeLandscapeState.value
@@ -770,9 +778,14 @@ fun BookshelfScreen(
                         )
                     }
                 } else if (bookGroupStyle == 2 && isRoot && !isUsingStandaloneSearchGroup) {
-                    val folderColumns =
-                        if (bookshelfFolderLayoutMode == 0) bookshelfFolderLayoutList else bookshelfFolderLayoutGrid
-                    val isGridMode = bookshelfFolderLayoutMode != 0
+                    val folderColumns = if (isIosBookshelf) {
+                        bookshelfIosColumns
+                    } else if (bookshelfFolderLayoutMode == 0) {
+                        bookshelfFolderLayoutList
+                    } else {
+                        bookshelfFolderLayoutGrid
+                    }
+                    val isGridMode = isIosBookshelf || bookshelfFolderLayoutMode != 0
                     FastScrollLazyVerticalGrid(
                         columns = GridCells.Fixed(folderColumns.coerceAtLeast(1)),
                         state = folderGridState,
@@ -786,10 +799,14 @@ fun BookshelfScreen(
                         contentPadding = adaptiveContentPaddingBookshelf(
                             top = paddingValues.calculateTopPadding(),
                             bottom = if (ThemeConfig.useFloatingBottomBar || ThemeConfig.enableBlur) 120.dp else 8.dp,
-                            horizontal = 4.dp
+                            horizontal = if (isIosBookshelf) 8.dp else 4.dp
                         ),
-                        verticalArrangement = Arrangement.spacedBy(if (isGridMode) 8.dp else 0.dp),
-                        horizontalArrangement = Arrangement.spacedBy(if (isGridMode) 8.dp else 0.dp),
+                        verticalArrangement = Arrangement.spacedBy(
+                            if (isIosBookshelf) 16.dp else if (isGridMode) 8.dp else 0.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            if (isIosBookshelf) 12.dp else if (isGridMode) 8.dp else 0.dp
+                        ),
                         showFastScroll = BookshelfConfig.showBookshelfFastScrollerState.value
                     ) {
                         itemsIndexed(
@@ -802,7 +819,7 @@ fun BookshelfScreen(
                             } else {
                                 null
                             }
-                            if (bookshelfFolderLayoutMode == 0) {
+                            if (!isIosBookshelf && bookshelfFolderLayoutMode == 0) {
                                 BookGroupItemList(
                                     group = group,
                                     previewBooks = uiState.groupPreviews[group.groupId]
@@ -828,11 +845,12 @@ fun BookshelfScreen(
                                     previewBooks = uiState.groupPreviews[group.groupId]
                                         ?: emptyList(),
                                     countText = countText,
-                                    gridStyle = BookshelfConfig.bookshelfGridLayoutState.value,
+                                    gridStyle = if (isIosBookshelf) 0 else BookshelfConfig.bookshelfGridLayoutState.value,
                                     titleSmallFont = BookshelfConfig.bookshelfTitleSmallFontState.value,
-                                    titleCenter = BookshelfConfig.bookshelfTitleCenterState.value,
+                                    titleCenter = if (isIosBookshelf) false else BookshelfConfig.bookshelfTitleCenterState.value,
                                     titleMaxLines = BookshelfConfig.bookshelfTitleMaxLinesState.value,
                                     coverShadow = BookshelfConfig.bookshelfCoverShadowState.value,
+                                    iosStyle = isIosBookshelf,
                                     onClick = {
                                         scope.launch { pagerState.scrollToPage(index) }
                                         viewModel.setInFolderRoot(false)
@@ -1304,6 +1322,14 @@ fun BookshelfPage(
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val bookshelfLayoutStyle by BookshelfConfig.bookshelfLayoutStyleState
+    val isIosBookshelf = bookshelfLayoutStyle == 1
+    val bookshelfIosColumns by remember(isLandscape) {
+        derivedStateOf {
+            if (isLandscape) BookshelfConfig.bookshelfIosColumnsLandscapeState.value
+            else BookshelfConfig.bookshelfIosColumnsPortraitState.value
+        }
+    }
     val bookshelfLayoutMode by remember(isLandscape) {
         derivedStateOf {
             if (isLandscape) BookshelfConfig.bookshelfLayoutModeLandscapeState.value
@@ -1322,12 +1348,13 @@ fun BookshelfPage(
             else BookshelfConfig.bookshelfLayoutListPortraitState.value
         }
     }
-    val columns by remember {
-        derivedStateOf {
-            if (bookshelfLayoutMode == 0) bookshelfLayoutList else bookshelfLayoutGrid
-        }
+    val effectiveLayoutMode = if (isIosBookshelf) 1 else bookshelfLayoutMode
+    val columns = when {
+        isIosBookshelf -> bookshelfIosColumns
+        bookshelfLayoutMode == 0 -> bookshelfLayoutList
+        else -> bookshelfLayoutGrid
     }
-    val isGridMode by remember { derivedStateOf { bookshelfLayoutMode != 0 } }
+    val isGridMode = effectiveLayoutMode != 0
     val bookItemGridStyle by BookshelfConfig.bookshelfGridLayoutState
     val bookItemIsCompact by BookshelfConfig.bookshelfLayoutCompactState
     val bookItemTitleSmallFont by BookshelfConfig.bookshelfTitleSmallFontState
@@ -1377,10 +1404,14 @@ fun BookshelfPage(
             contentPadding = adaptiveContentPaddingBookshelf(
                 top = paddingValues.calculateTopPadding(),
                 bottom = if (ThemeConfig.useFloatingBottomBar || ThemeConfig.enableBlur) 120.dp else 8.dp,
-                horizontal = 8.dp
+                horizontal = if (isIosBookshelf) 12.dp else 8.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(if (isGridMode) 8.dp else 0.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (isGridMode) 8.dp else 0.dp),
+            verticalArrangement = Arrangement.spacedBy(
+                if (isIosBookshelf) 16.dp else if (isGridMode) 8.dp else 0.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(
+                if (isIosBookshelf) 12.dp else if (isGridMode) 8.dp else 0.dp
+            ),
             showFastScroll = showFastScroll
         ) {
             itemsIndexed(displayBooks, key = { _, item -> item.book.bookUrl }) { index, bookUi ->
@@ -1428,15 +1459,16 @@ fun BookshelfPage(
                             .graphicsLayer {
                                 alpha = if (isDragging) 0.5f else 1f
                             },
-                        layoutMode = bookshelfLayoutMode,
+                        layoutMode = effectiveLayoutMode,
                         isSelected = isSelected,
-                        gridStyle = bookItemGridStyle,
+                        gridStyle = if (isIosBookshelf) 0 else bookItemGridStyle,
                         isCompact = bookItemIsCompact,
                         isUpdating = uiState.updatingBooks.contains(bookUi.book.bookUrl),
                         titleSmallFont = bookItemTitleSmallFont,
-                        titleCenter = bookItemTitleCenter,
+                        titleCenter = if (isIosBookshelf) false else bookItemTitleCenter,
                         titleMaxLines = bookItemTitleMaxLines,
                         coverShadow = bookItemCoverShadow,
+                        iosStyle = isIosBookshelf,
                         isSearchMode = uiState.isSearch,
                         searchKey = uiState.searchKey,
                         sharedTransitionScope = sharedTransitionScope,

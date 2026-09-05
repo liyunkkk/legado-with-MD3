@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -148,6 +147,7 @@ fun BookshelfCoverFrame(
     content: @Composable (Modifier) -> Unit,
 ) {
     val shape = RoundedCornerShape(radius)
+    val isDark = LegadoTheme.isDark
     val decorationModifier = Modifier.then(
         if (animatedVisibilityScope != null) {
             with(animatedVisibilityScope) {
@@ -162,7 +162,7 @@ fun BookshelfCoverFrame(
     ) {
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxSize()
                 .offset(y = 2.dp)
                 .shadow(
                     elevation = 7.dp,
@@ -174,12 +174,12 @@ fun BookshelfCoverFrame(
         )
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxSize()
                 .offset(x = 1.5.dp, y = 1.5.dp)
                 .clip(shape)
-                .background(if (LegadoTheme.isDark) Color(0xFFB8B5AE) else Color(0xFFF3F0E8))
+                .background(if (isDark) Color(0xFFB8B5AE) else Color(0xFFF3F0E8))
                 .drawWithCache {
-                    val lineColor = if (LegadoTheme.isDark) {
+                    val lineColor = if (isDark) {
                         Color.White.copy(alpha = 0.10f)
                     } else {
                         Color.Black.copy(alpha = 0.10f)
